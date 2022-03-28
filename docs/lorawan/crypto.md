@@ -300,6 +300,20 @@ Pour la suite de la documentation, contactez-nous ! En effet, c'est un des TPs d
 
 * Une fois la compromission faite, il est impossible de changer la clé AES sur le noeud (s'il n'y a pas d'autre canal securisé pour accéder au noeud)
 
+## Cryptanalyse de la séquence des blocs de chiffrement
+
+Parmi les vulnérabilités évoquées dans les publications en début d’article, l’usage non optimal d’AES a été souligné. En effet, le chiffrement utilise une opération Xor associée à une séquence de blocs de chiffrement qui peut être générée à partir de la clé de session ainsi que des valeurs connues de DevAddr et de sequenceNumber. Ce dernier est un entier sur 16 bits. Lorsqu’il boucle, la séquence de blocs de chiffrement est réutilisée.
+
+Le programme Loracrypt permet de chiffrer un message à partir d’une AppSKey, du DevAddr et du sequenceCounter (Fcnt) qui sont connus. Il permet de visualiser la génération de la séquence des blocs de chiffrement.
+
+Chiffrement de deux messages similaires pour une clé, un devAddr et un sequenceCounter connus.
+
+Dès lors que des paquets chiffrés avec la même clé seront capturés, si les clés de session ne sont pas réinitialisées, selon la nature des données et leur variabilité, il sera possible de procéder à une opération xor bloc par bloc afin d’extraire des éléments de la clé « courante » de la séquence de chiffrement. Ces informations agrégées dans le temps peuvent faciliter une cryptanalyse.
+
+Lors de nos tests, il a été possible de capturer des envois de données assez réguliers, de l’ordre d’un paquet toutes les trente secondes. À supposer que ce périphérique ne soit pas réinitialisé, il faudrait environ 22 jours avant que le sequenceCounter boucle. C’est le temps requis pour commencer à envisager une attaque par cryptanalyse.
+
+Celle-ci ne serait par ailleurs pas garantie selon la nature des données encodées : texte ou binaire. Il serait nécessaire de disposer de plus d’informations sur le périphérique émettant ces paquets, éventuellement en l’identifiant par son DevEUI si on a pu le capturer.
+
 ## Bonnes pratiques
 
 * Éviter le mode ABP car les clés de sessions sont stockées en dur et ne sont pas renouvelables facilement.
