@@ -9,6 +9,10 @@ Ce que l'on appelle *sécurité* d'un système d'information repose sur quatre p
 * *intégrité* : l’information ne peut être modifiée par une personne non autorisée. L'information transmise ne peut pas être modifiée ou cela doit se voir immédiatement.
 * *non-répudiation* : l'information ne peut faire l'objet d'un déni de la part de son auteur. Dans notre contexte, il faut que les données aient été envoyée et reçues par les bons matériels.
 
+
+Voici comment se résume la sécurité de LoRaWan  :
+![](../assets/img/Imagesecurite.png)
+
 !!! tip
     Plus d'informations sur https://www.ssi.gouv.fr/particulier/bonnes-pratiques/crypto-le-webdoc/cryptologie-art-ou-science-du-secret/ et aussi https://www.cnil.fr/fr/comprendre-les-grands-principes-de-la-cryptologie-et-du-chiffrement
 
@@ -307,6 +311,9 @@ Pour la suite de la documentation, contactez-nous ! En effet, c'est un des TPs d
 LoRaWAN was designed for hardware-constrained devices, so it had to balance many tradeoffs. Also, keep in mind that most applications are for sending data from distributed sensors to the cloud, not for controlling ATM cash dispensers. For typical applications, it's an easy to use, cheap, and effectively secure solution.
 
 ## Ressources
+
+
+Document en pdf sur la sécurité du protocole LoRaWan : https://lora-alliance.org/wp-content/uploads/2020/11/lorawan_security_whitepaper.pdf
 
 Étude de chiffrement dans un réseau IoT : le cas LoRaWan : https://connect.ed-diamond.com/MISC/MISCHS-015/LORAWAN-deploiement-d-une-infrastructure-de-test
 
