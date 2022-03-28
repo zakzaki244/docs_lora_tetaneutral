@@ -308,6 +308,9 @@ LoRaWAN was designed for hardware-constrained devices, so it had to balance many
 
 ## Ressources
 
+Étude de chiffrement dans un réseau IoT : le cas LoRaWan : https://connect.ed-diamond.com/MISC/MISCHS-015/LORAWAN-deploiement-d-une-infrastructure-de-test
+
+
 [https://labs.mwrinfosecurity.com/assets/BlogFiles/mwri-LoRa-security-guide-1.2-2016-03-22.pdf](https://labs.mwrinfosecurity.com/assets/BlogFiles/mwri-LoRa-security-guide-1.2-2016-03-22.pdf)
 
 Approche de la cryptanalyse de la séquence des blocs de chiffrement : [https://www.miscmag.com/lorawan-deploiement-dune-infrastructure-de-test-partie-2-2/](https://www.miscmag.com/lorawan-deploiement-dune-infrastructure-de-test-partie-2-2/)
