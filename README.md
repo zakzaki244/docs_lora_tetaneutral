@@ -1,5 +1,4 @@
 # docs_lora_tetaneutral
-image:https://i.imgur.com/sOM9EiR.png[width=20%]
 
 == Les membres 
 [WARNING]
