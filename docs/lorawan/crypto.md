@@ -6,11 +6,20 @@ Ce que l'on appelle *sécurité* d'un système d'information repose sur quatre p
 
 * *confidentialité* : l'information ne peut être lue par une personne non autorisée. Il doit être impossible (ou très difficile) de lire les données transmises en LoRaWAN
 * *authenticité* : l'information est attribuée à son auteur légitime. On doit savoir avec certitude quel noeud a envoyé l'information.
-* *intégrité* : l’information ne peut être modifiée par une personne non autorisée. L'information transmise ne peut pas être modifiée ou cela doit se voir immédiatement.
+* *intégrité* : l’information ne peut être modifiée par une personne non autorisée. L'information transmise ne peut pas être modifiée ou cela doit se voir immédiatement. 
 * *non-répudiation* : l'information ne peut faire l'objet d'un déni de la part de son auteur. Dans notre contexte, il faut que les données aient été envoyée et reçues par les bons matériels.
 
+## Un réseau LORAWAN comprend trois catégories d’éléments (figure1) :
 
-Voici comment se résume la sécurité de LoRaWan  :
+Les nœuds : il s’agit des objets connectés disposant d’un émetteur récepteur LoRaWAN. Ils disposent de capteurs afin d’effectuer de la remontée d’informations et peuvent recevoir des messages pour déclencher des opérations. Ils sont déployés dans l’environnement après avoir été configurés et doivent être autonomes. Ils disposent d’un identifiant unique DevEUI de 64 bits. Les informations remontées sont associées à un numéro d’application unique AppEUI de 64 bits. Selon la méthode d’activation choisie, une clé AppKey ou deux clés NwkSKey et AppSKey devront être choisies. Elles ont une taille de 128 bits.
+Les passerelles : elles sont déployées par les opérateurs ou par des associations souhaitant déployer un réseau IoT LoRaWAN. Placées de préférence en hauteur afin de maximiser la réception, elles sont chargées de recevoir les paquets LoRa et de transmettre ceux qui sont des paquets LoRaWAN valides vers les différents serveurs applicatifs. Pour y parvenir, elles sont connectées à ceux-ci au moyen de liens réseaux classiques : réseaux câblés ou mobiles. Elles sont identifiées par un identifiant de 8 octets.
+Les serveurs applicatifs : ces équipements prennent en charge le traitement du protocole LoRaWAN : activation des nœuds, déchiffrement des données et transmission vers les applications métiers.
+Les charges utiles des applications LoRaWAN™ sont toujours chiffrées de bout en bout entre l'appareil final et le serveur d'applications. L'intégrité est assurée saut par saut : un saut par voie hertzienne grâce à la protection de l'intégrité assurée par le protocole LoRaWAN
+et l'autre saut entre le réseau et le serveur d'application en utilisant des solutions de transport sécurisées telles que HTTPS et VPN.
+
+![](../assets/img/figure1.png)
+
+Enfin, voici comment se résume la sécurité de LoRaWan  :
 ![](../assets/img/Imagesecurite.png)
 
 !!! tip
@@ -87,11 +96,20 @@ Le _message integrity code_ est calculé sur les champs : MHDR|FHDR|FPort|FRMPay
 
 Selon les spécifications LoRaWAN 1.1, ce code MIC est calculé par `cmacS = aes128_cmac(SNwkSIntKey, B1 | msg)` où `B1` est un bloc de donnée (contenant l'adresse du noeud, la longueur de message, etc...) et `msg`, les champs définis ci-dessus. `SNwkSIntKey` est la clé dérivée à partir des AppKey et Nwkkey.
 
-## Sécurité en mode OTAA
+## Lors de la configuration des nœuds, il est nécessaire de choisir entre deux modes d’activation :
+
+### Sécurité en mode ABP
+
+ABP (Activation By Personalization) : deux clés NwkSKey et AppSKey doivent être choisies ainsi qu’une adresse réseau DevAddr de 4 octets. Ce sont ces clés qui seront utilisées pour dériver un keystream utilisé lors des opérations de chiffrement. Elles sont configurées directement dans l’équipement avant son déploiement et dans l’interface d’administration des objets connectés du serveur d’applications.
+
+### Sécurité en mode OTAA
 
 Comme vu, en OTAA, le device envoie une requête de _join-request_ qui contient son _AppEUI_ et _DevEUI_ accompagne d'un _DevNonce_ qui est un nombre aléatoire sur 2 octets. Si la requête est acceptée, le serveur renvoie, via la passerelle, un message de _join-accept_.
 
 Il est intéressant de capturer cet échange et d'observer.
+
+OTAA (Over The Air Activation) : dans ce mode, une simple clé AppKey est nécessaire à la configuration du nœud. Elle doit être aussi configurée dans le serveur d’application. Lors du démarrage du nœud, cette clé sera utilisée au cours d’un premier échange de messages Join-Request et Join-Accept pour générer des clés de session NwkSKey et AppSKey qui seront ensuite utilisées pour chiffrer les données échangées ; ces clés de session sont conservées jusqu’à leur réinitialisation. Lors de cette étape, le nœud envoie un aléa de 16 bits qui sera utilisé pour dériver les clés de sessions. Un paquet Join-Accept sera renvoyé à destination du nœud, chiffré avec l’AppKey et contenant notamment l’adresse DevAddr attribuée automatiquement ainsi qu’un aléa de 24 bits utilisé pour dériver les clefs de sessions.
+
 
 ### Join-request
 
